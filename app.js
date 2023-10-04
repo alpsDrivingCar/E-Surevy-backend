@@ -44,7 +44,7 @@ app.use(function(err, req, res, next) {
 mongoose.connect("mongodb+srv://mohammedmansour4009:qEJyk5bFLnKWzyUn@cluster0.kukyo7j.mongodb.net/?retryWrites=true&w=majority", {
   useNewUrlParser: true, useUnifiedTopology: true,
 }).then(() => {
-  app.listen(process.env.PORT || 5000, function(){
+  app.listen( 5000, function(){
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
     console.log("Express server listening on port %d in %s mode", this.address().port, process.env.PORT );
   });
