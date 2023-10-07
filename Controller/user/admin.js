@@ -43,7 +43,7 @@ exports.loginAdmin = async (req, res) => {
 
         // Compare the provided password with the stored password (you should use a secure password hashing library in production)
         if (admin.password !== password) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ error: 'Invalid credentials  body= ' + req.body });
         }
 
         // At this point, the login is successful
