@@ -37,7 +37,7 @@ exports.loginAdmin = async (req, res) => {
         };
 
         // Find the admin by username in the database
-        const admin = await AdminSchema.find(filter);
+        const admin = await AdminSchema.findOne(filter);
 
         // Check if the admin exists
         if (!admin) {
