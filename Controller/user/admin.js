@@ -50,7 +50,9 @@ exports.loginAdmin = async (req, res) => {
         }
 
         // At this point, the login is successful
-        res.json({ message: 'Login successful' + admin });
+        // res.json({ message: 'Login successful' + admin });
+        res.status(200).json({message: 'Login successful', data: admin});
+
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ error: 'Internal Server Error' + error });
