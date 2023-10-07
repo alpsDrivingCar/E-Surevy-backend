@@ -32,9 +32,18 @@ exports.registerAdmin = async (req, res) => {
 exports.loginAdmin = async (req, res) => {
     try {
         const { phone, password } = req.body;
+        
+
+        // const filter = {
+        //     "postCode": postcode,
+        // };
+
+        const filter = {
+            "phone": phone 
+        };
 
         // Find the admin by username in the database
-        const admin = await AdminSchema.find();
+        const admin = await AdminSchema.find(filter);
 
         // Check if the admin exists
         if (!admin) {
