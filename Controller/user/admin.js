@@ -36,21 +36,14 @@ exports.loginAdmin = async (req, res) => {
             "phone": phone 
         };
 
-        // Find the admin by username in the database
         const admin = await AdminSchema.findOne(filter);
 
-        // Check if the admin exists
         if (!admin) {
             return res.status(401).json({ error: 'Admin not exists' });
         }
-
-        // Compare the provided password with the stored password (you should use a secure password hashing library in production)
         if (admin.password !== password) {
             return res.status(401).json({ error: 'Invalid credentials  body= ' + phone + password });
         }
-
-        // At this point, the login is successful
-        // res.json({ message: 'Login successful' + admin });
         res.status(200).json({message: 'Login successful', data: admin});
 
     } catch (error) {
