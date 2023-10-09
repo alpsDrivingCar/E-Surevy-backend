@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const supervisorSchema = new Schema({
-    name: String,
+    supervisorName: String,
     password:String,
     phone:String,
     companyName:String
