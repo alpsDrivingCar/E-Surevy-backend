@@ -40,8 +40,8 @@ exports.registerSupervisor = async (req, res) => {
 
         // Save the supervisor to the database
         await supervisor.save();
-.
         res.status(201).json({message: 'Supervisor registered successfully', data: supervisor});
+
     } catch (error) {
         console.error('Error registering supervisor:', error);
         res.status(500).json({error: 'Internal Server Error :' + error});
