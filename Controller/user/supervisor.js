@@ -94,11 +94,26 @@ exports.supervisorUpdate = (req, res) => {
 }
 
 exports.deleteSupervisor = (req, res) => {
-    SupervisorSchema.findByIdAndDelete(req.params.id)
+    // Validate if the ID is present
+    if (!req.params.id) {
+        return res.status(400).send({message: "Supervisor ID is required."});
+    }
+
+    SupervisorSchema.findById(req.params.id)
+        .then((supervisor) => {
+            // Check if the supervisor exists
+            if (!supervisor) {
+                return res.status(404).send({message: "Supervisor not found with ID: " + req.params.id});
+            }
+
+            return SupervisorSchema.findByIdAndDelete(req.params.id);
+        })
         .then((result) => {
-            res.send("Delete " + result.response)
+            return res.send({message: "Supervisor successfully deleted."});
         })
         .catch((err) => {
             console.log(err);
+            return res.status(500).send({message: "Error occurred while deleting the supervisor."});
         });
 }
+
