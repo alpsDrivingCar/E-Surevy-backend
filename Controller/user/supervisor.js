@@ -109,7 +109,7 @@ exports.deleteSupervisor = (req, res) => {
             return SupervisorSchema.findByIdAndDelete(req.params.id);
         })
         .then((result) => {
-            return res.send({message: "Supervisor successfully deleted."});
+            return res.status(200).send({message: "Supervisor successfully deleted."});
         })
         .catch((err) => {
             console.log(err);
