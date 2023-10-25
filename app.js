@@ -22,6 +22,7 @@ module.exports = app;
 function handleRoutes() {
   app.use('/api/admin', require('./routes/user/Admin'))
   app.use('/api/supervisor', require('./routes/user/Supervisor'))
+  app.use('/api/surveyor', require('./routes/user/Surveyors'))
 }
 
 function handleMongooseConnect() {

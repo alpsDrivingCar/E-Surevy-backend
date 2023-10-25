@@ -1,4 +1,4 @@
-const supervisorServer = require('../../Controller/user/supervisor')
+const supervisorServer = require('../../Controller/user/supervisorController')
 const express = require("express");
 const router = express.Router();
 
