@@ -82,15 +82,45 @@ exports.allSupervisor = async (req, res) => {
     }
 }
 
-exports.supervisorUpdate = (req, res) => {
-    SupervisorSchema.findByIdAndUpdate("64b26a3bfeb691283105b1be").updateOne(req.body)
-        .then((result) => {
-            res.json(result)
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-}
+exports.supervisorUpdate = async (req, res) => {
+    try {
+        // Extract supervisor ID from request parameters
+        const supervisorId = req.params.id;
+
+        // Validation checks (modify as needed for update operation)
+        const validationChecks = [
+            body('phone').optional().isMobilePhone().withMessage('Invalid phone number'),
+            body('password').optional().isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+            body('companyName').optional().notEmpty().withMessage('Company name is required')
+        ];
+
+        // Run validation checks
+        for (const validationCheck of validationChecks) {
+            await validationCheck.run(req);
+        }
+
+        // Handle validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const errorMessages = errors.array().map(error => error.msg);
+            return res.status(400).json({ errors: errorMessages[0] });
+        }
+
+        // Update supervisor
+        const updateData = req.body;
+        const updatedSupervisor = await SupervisorSchema.findByIdAndUpdate(supervisorId, updateData, { new: true });
+
+        if (!updatedSupervisor) {
+            return res.status(404).json({ error: 'Supervisor not found' });
+        }
+
+        res.status(200).json({ message: 'Supervisor updated successfully', data: updatedSupervisor });
+
+    } catch (error) {
+        console.error('Error updating supervisor:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 exports.deleteSupervisor = (req, res) => {
     // Validate if the ID is present
