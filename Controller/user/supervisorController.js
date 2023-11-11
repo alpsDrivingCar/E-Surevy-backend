@@ -7,7 +7,6 @@ exports.registerSupervisor = async (req, res) => {
         const validationChecks = [
             body('phone').isMobilePhone().withMessage('Invalid phone number'),
             body('password').isLength({min: 6}).withMessage('Password must be at least 6 characters long'),
-            body('supervisorName').notEmpty().withMessage('Supervisor Name is required'),
             body('companyName').notEmpty().withMessage('Company name is required')
         ];
 
@@ -21,7 +20,7 @@ exports.registerSupervisor = async (req, res) => {
             return res.status(400).json({errors: errorMessages[0]});
         }
 
-        const {phone, password, supervisorName, companyName} = req.body;
+        const {phone, password, imageUrl, companyName} = req.body;
 
         // Check if the supervisor already exists
         const existingSupervisor = await SupervisorSchema.findOne({phone});
@@ -32,7 +31,7 @@ exports.registerSupervisor = async (req, res) => {
 
         // Create a new supervisor
         const supervisor = new SupervisorSchema({
-            supervisorName,
+            imageUrl,
             password,
             phone,
             companyName
