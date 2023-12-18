@@ -23,13 +23,16 @@ function handleRoutes() {
   app.use('/api/admin', require('./routes/user/Admin'))
   app.use('/api/supervisor', require('./routes/user/Supervisor'))
   app.use('/api/surveyor', require('./routes/user/Surveyors'))
+
+  // report
+  app.use('/api/report', require('./routes/report/report'))
 }
 
 function handleMongooseConnect() {
   mongoose.connect("mongodb+srv://mohammedmansour4009:qEJyk5bFLnKWzyUn@cluster0.kukyo7j.mongodb.net/?retryWrites=true&w=majority", {
     useNewUrlParser: true, useUnifiedTopology: true,
   }).then(() => {
-    app.listen(5000, function () {
+    app.listen(3000, function () {
       console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
     });
   })
@@ -49,10 +52,11 @@ function viewEngineSetup() {
 
 
 function observerApi() {
-// catch 404 and forward to error handler
-  app.use(function (req, res, next) {
-    next(createError(404));
-  });
+// // catch 404 and forward to error handler
+//   app.use(function (req, res, next) {
+//     console.log("ssss")
+//     next(createError(404));
+//   });
 
 // error handler
   app.use(function (err, req, res, next) {
