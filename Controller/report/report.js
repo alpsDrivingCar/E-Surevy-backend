@@ -83,7 +83,8 @@ exports.getReportsBySupervisor = async (req, res) => {
         }
 
         const reports = await Report.find({ supervisorId });
-        res.status(200).json(reports);
+        res.status(200).json({data: reports});
+
     } catch (error) {
         console.error('Error fetching reports:', error);
         res.status(500).json({ error: 'Internal Server Error: ' + error });
