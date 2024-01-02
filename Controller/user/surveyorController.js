@@ -1,4 +1,5 @@
 const SurveyorSchema = require("../../model/user/surveyorSchema");
+const SupervisorSchema = require("../../model/user/supervisorSchema");
 const {body, validationResult} = require('express-validator');
 
 exports.registerSurveyor = async (req, res) => {
@@ -82,6 +83,23 @@ exports.allSurveyor = async (req, res) => {
         res.status(500).json({error: 'Internal Server Error' + error});
     }
 }
+
+exports.getSurveyorBySupervisorId = async (req, res) => {
+    try {
+        const supervisorId = req.params.id;
+        const supervisor = await SupervisorSchema.findById(supervisorId).populate('surveyors');
+        // Check if the supervisor exists
+        if (!supervisor) {
+            return res.status(404).json({ error: 'Supervisor not found' });
+        }
+
+        // Sending back the surveyors linked to the supervisor
+        res.status(200).json({ data: supervisor.surveyors });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal Server Error: ' + error.message });
+    }
+};
 
 exports.surveyorUpdate = (req, res) => {
     SurveyorSchema.findByIdAndUpdate("64b26a3bfeb691283105b1be").updateOne(req.body)

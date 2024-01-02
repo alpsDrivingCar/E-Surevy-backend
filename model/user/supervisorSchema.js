@@ -3,10 +3,15 @@ const Schema = mongoose.Schema;
 
 
 const supervisorSchema = new Schema({
-    password:String,
-    phone:String,
-    companyName:String,
-    imageUrl: String
+    password: String,
+    phone: String,
+    companyName: String,
+    imageUrl: String,
+    surveyors: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'surveyor'  // This should match the name of the surveyor model
+    }]
 });
 
 

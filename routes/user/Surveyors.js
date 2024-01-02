@@ -7,6 +7,7 @@ router.post("/register",surveyorServer.registerSurveyor)
 router.delete("/:id",surveyorServer.deleteSurveyor)
 router.put("/",surveyorServer.surveyorUpdate)
 router.get("/all",surveyorServer.allSurveyor)
+router.get("/:id",surveyorServer.getSurveyorBySupervisorId)
 
 module.exports = router
 

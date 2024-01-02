@@ -20,7 +20,7 @@ exports.registerSupervisor = async (req, res) => {
             return res.status(400).json({errors: errorMessages[0]});
         }
 
-        const {phone, password, imageUrl, companyName} = req.body;
+        const {phone, password, imageUrl, companyName,surveyors} = req.body;
 
         // Check if the supervisor already exists
         const existingSupervisor = await SupervisorSchema.findOne({phone});
@@ -34,7 +34,8 @@ exports.registerSupervisor = async (req, res) => {
             imageUrl,
             password,
             phone,
-            companyName
+            companyName,
+            surveyors
         });
 
         // Save the supervisor to the database
@@ -85,7 +86,8 @@ exports.allSupervisor = async (req, res) => {
 exports.supervisorUpdate = async (req, res) => {
     try {
         // Extract supervisor ID from request parameters
-        const supervisorId = req.params.id;
+        const supervisorId = req.params.id
+
 
         // Validation checks (modify as needed for update operation)
         const validationChecks = [
