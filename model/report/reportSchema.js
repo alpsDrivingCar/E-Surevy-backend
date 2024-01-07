@@ -25,7 +25,7 @@ const reportSchema = new Schema({
     reports: [mainListPdfModelSchema],
     supervisorId: { type: ObjectId, ref: 'supervisor' },
     surveyorId: { type: ObjectId, ref: 'surveyor' }
-});
+}, { timestamps: true }); // Enable timestamps here
 
 // Create a model for Report
 const Report = mongoose.model("Report", reportSchema);

@@ -12,7 +12,7 @@ const supervisorSchema = new Schema({
         required: true,
         ref: 'surveyor'  // This should match the name of the surveyor model
     }]
-});
+},{ timestamps: true });
 
 
 // Create a model based on that schema

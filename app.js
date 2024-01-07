@@ -25,7 +25,7 @@ function handleRoutes() {
   app.use('/api/surveyor', require('./routes/user/Surveyors'))
 
   // report
-  app.use('/api/report', require('./routes/report/report'))
+  app.use('/api/report', require('./routes/report/reportRouter'))
 }
 
 function handleMongooseConnect() {

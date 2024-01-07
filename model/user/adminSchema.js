@@ -6,7 +6,7 @@ const adminSchema = new Schema({
     name: String,
     password:String,
     phone:String
-});
+},{ timestamps: true });
 
 
 // Create a model based on that schema
