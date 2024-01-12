@@ -98,7 +98,7 @@ exports.getReportsBySupervisorAndMonth = async (req, res) => {
                 $gte: new Date(year, month - 1, 1),
                 $lt: new Date(year, month, 1)
             }
-        });
+        }).populate('surveyorId');
 
         res.status(200).json({ data: reports });
 
