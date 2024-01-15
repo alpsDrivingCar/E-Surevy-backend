@@ -149,7 +149,7 @@ exports.getReportsBySurveyorAndMonth = async (req, res) => {
                 $gte: new Date(year, month - 1, 1),
                 $lt: new Date(year, month, 0) // Gets the last day of the month
             }
-        });
+        }).populate('surveyorId');
 
         res.status(200).json({ data: reports });
 
