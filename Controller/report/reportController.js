@@ -122,20 +122,20 @@ exports.getReportsAll = async (req, res) => {
 
 exports.getReportsBySupervisorAndSurveyor = async (req, res) => {
     try {
-        const { supervisorId, surveyorId } = req.params;
+        const { surveyorId } = req.params;
 
-        if (checkIsIdsValid(supervisorId, surveyorId)) {
-            return res.status(400).json({ error: 'Invalid supervisorId or surveyorId.' });
+        console.log("surveyorId" + surveyorId)
+        if (!mongoose.Types.ObjectId.isValid(surveyorId)) {
+            return res.status(400).json({ error: 'Invalid surveyorId.' });
         }
 
-        const supervisorExists = await Supervisor.findById(supervisorId);
         const surveyorExists = await Surveyor.findById(surveyorId);
 
-        if (!supervisorExists || !surveyorExists) {
-            return res.status(404).json({ error: 'Supervisor or Surveyor not found.' });
+        if (!surveyorExists) {
+            return res.status(404).json({ error: 'Surveyor not found.' });
         }
 
-        const reports = await ReportSchema.find({ supervisorId, surveyorId });
+        const reports = await ReportSchema.find({ surveyorId });
         res.status(200).json(reports);
     } catch (error) {
         console.error('Error fetching reports:', error);
