@@ -120,26 +120,42 @@ exports.getReportsAll = async (req, res) => {
     }
 };
 
-exports.getReportsBySupervisorAndSurveyor = async (req, res) => {
+exports.getReportsBySurveyorAndMonth = async (req, res) => {
     try {
-        const { surveyorId } = req.params;
+        const surveyorId = req.params.surveyorId;
+        const year = parseInt(req.params.year);
+        const month = parseInt(req.params.month);
 
-        console.log("surveyorId" + surveyorId)
         if (!mongoose.Types.ObjectId.isValid(surveyorId)) {
             return res.status(400).json({ error: 'Invalid surveyorId.' });
         }
 
-        const surveyorExists = await Surveyor.findById(surveyorId);
+        if (!month || month < 1 || month > 12) {
+            return res.status(400).json({ error: 'Invalid month. Must be between 1 and 12.' });
+        }
 
+        if (!year) {
+            return res.status(400).json({ error: 'Invalid year.' });
+        }
+
+        const surveyorExists = await Surveyor.findById(surveyorId);
         if (!surveyorExists) {
             return res.status(404).json({ error: 'Surveyor not found.' });
         }
 
-        const reports = await ReportSchema.find({ surveyorId });
-        res.status(200).json(reports);
+        const reports = await ReportSchema.find({
+            surveyorId,
+            createdAt: {
+                $gte: new Date(year, month - 1, 1),
+                $lt: new Date(year, month, 0) // Gets the last day of the month
+            }
+        });
+
+        res.status(200).json({ data: reports });
+
     } catch (error) {
-        console.error('Error fetching reports:', error);
+        console.error('Error in getReportsBySurveyorAndMonth:', error);
         res.status(500).json({ error: 'Internal Server Error: ' + error });
     }
-};
+}
 
