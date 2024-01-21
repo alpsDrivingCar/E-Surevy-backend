@@ -90,26 +90,33 @@ exports.getSurveyorBySupervisorId = async (req, res) => {
         const supervisor = await SupervisorSchema.findById(supervisorId).populate('surveyors');
         // Check if the supervisor exists
         if (!supervisor) {
-            return res.status(404).json({ error: 'Supervisor not found' });
+            return res.status(404).json({error: 'Supervisor not found'});
         }
 
         // Sending back the surveyors linked to the supervisor
-        res.status(200).json({ data: supervisor.surveyors });
+        res.status(200).json({data: supervisor.surveyors});
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ error: 'Internal Server Error: ' + error.message });
+        res.status(500).json({error: 'Internal Server Error: ' + error.message});
     }
 };
 
-exports.surveyorUpdate = (req, res) => {
-    const supervisorId = req.params.id
-    SurveyorSchema.findByIdAndUpdate(supervisorId).updateOne(req.body)
-        .then((result) => {
-            res.status(200).json({message: 'Supervisor updated successfully', data: result});
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+exports.surveyorUpdate = async (req, res) => {
+    try {
+        const surveyorId = req.params.id
+        // Update supervisor
+        const updateData = req.body;
+        const updatedSupervisor = await SurveyorSchema.findByIdAndUpdate(surveyorId, updateData, {new: true});
+
+        if (!updatedSupervisor) {
+            return res.status(404).json({error: 'Supervisor not found'});
+        }
+
+        res.status(200).json({message: 'Supervisor updated successfully', data: updatedSupervisor});
+    } catch (error) {
+        console.error('Error updating supervisor:', error);
+        res.status(400).json({error: 'Internal Server Error'});
+    }
 }
 
 exports.deleteSurveyor = (req, res) => {
