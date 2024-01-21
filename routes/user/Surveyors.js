@@ -5,7 +5,7 @@ const router = express.Router();
 router.post("/login",surveyorServer.loginSurveyor)
 router.post("/register",surveyorServer.registerSurveyor)
 router.delete("/:id",surveyorServer.deleteSurveyor)
-router.put("/",surveyorServer.surveyorUpdate)
+router.put("/:id",surveyorServer.surveyorUpdate)
 router.get("/all",surveyorServer.allSurveyor)
 router.get("/:id",surveyorServer.getSurveyorBySupervisorId)
 

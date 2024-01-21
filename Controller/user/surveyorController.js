@@ -102,9 +102,10 @@ exports.getSurveyorBySupervisorId = async (req, res) => {
 };
 
 exports.surveyorUpdate = (req, res) => {
-    SurveyorSchema.findByIdAndUpdate("64b26a3bfeb691283105b1be").updateOne(req.body)
+    const supervisorId = req.params.id
+    SurveyorSchema.findByIdAndUpdate(supervisorId).updateOne(req.body)
         .then((result) => {
-            res.json(result)
+            res.status(200).json({message: 'Supervisor updated successfully', data: result});
         })
         .catch((err) => {
             console.log(err);

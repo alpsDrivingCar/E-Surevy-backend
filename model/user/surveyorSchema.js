@@ -6,7 +6,8 @@ const surveyorSchema = new Schema({
     surveyorName: String,
     password:String,
     phone:String,
-    companyName:String
+    companyName:String,
+    imageUrl: String,
 },{ timestamps: true });
 // Create a model based on that schema
 const Surveyor = mongoose.model("surveyor", surveyorSchema);
