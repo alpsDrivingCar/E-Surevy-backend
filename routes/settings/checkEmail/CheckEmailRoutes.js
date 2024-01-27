@@ -1,4 +1,4 @@
-const checkEmailServer = require('../../../Controller/settings/sendEmail')
+const checkEmailServer = require('../../../Controller/settings/sendEmailController')
 const express = require("express");
 const router = express.Router();
 

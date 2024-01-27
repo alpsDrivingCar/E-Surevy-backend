@@ -1,6 +1,9 @@
 const nodemailer = require('nodemailer');
 const CheckEmail = require("../../model/settings/checkout/checkEmail/checkEmailSchema");
 
+ /*
+ create later check if numer is vaild
+  */
 exports.sendEmailForChechEmailValid = async (req, res) => {
   try {
     const { toEmails } = req.body;

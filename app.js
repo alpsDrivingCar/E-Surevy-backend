@@ -28,7 +28,8 @@ function handleRoutes() {
   app.use('/api/report', require('./routes/report/reportRouter'))
   
   //settings 
-  app.use('/api/settings', require('./routes/settings/checkEmail/CheckEmailRoutes'))
+  app.use('/api/settings/checkEmail', require('./routes/settings/checkEmail/CheckEmailRoutes'))
+  app.use('/api/settings/changePassword', require('./routes/settings/resertPassword/ResertPasswordRoutes'))
 
 }
 
