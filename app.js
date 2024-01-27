@@ -26,6 +26,10 @@ function handleRoutes() {
 
   // report
   app.use('/api/report', require('./routes/report/reportRouter'))
+  
+  //settings 
+  app.use('/api/settings', require('./routes/settings/checkEmail/CheckEmailRoutes'))
+
 }
 
 function handleMongooseConnect() {

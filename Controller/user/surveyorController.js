@@ -112,7 +112,7 @@ exports.surveyorUpdate = async (req, res) => {
             return res.status(404).json({error: 'Supervisor not found'});
         }
 
-        res.status(200).json({message: 'Supervisor updated successfully', data: updatedSupervisor});
+        res.status(200).json({message: 'Surveyor updated successfully', data: updatedSupervisor});
     } catch (error) {
         console.error('Error updating supervisor:', error);
         res.status(400).json({error: 'Internal Server Error'});
