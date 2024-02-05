@@ -7,6 +7,7 @@ const ObjectId = Schema.Types.ObjectId;
 const valuePdfModelSchema = new Schema({
     value: { type: String, default: "" },
     isCheck: { type: Boolean, default: false },
+    slug: { type: String, default: true },
     label: { type: String, default: "" },
     isEmpty: { type: Boolean, default: false },
     isHideCheckBox: { type: Boolean, default: false }
