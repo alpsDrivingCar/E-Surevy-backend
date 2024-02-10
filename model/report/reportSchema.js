@@ -15,8 +15,8 @@ const valuePdfModelSchema = new Schema({
 
 // Define the MainListPdfModel Schema
 const mainListPdfModelSchema = new Schema({
-    label: { type: String, required: true },
-    type: { type: String, required: true },
+    label: { type: String, required: false },
+    type: { type: String, required: false },
     singleValues: [valuePdfModelSchema],
     isBig: { type: Boolean, default: false }
 });
