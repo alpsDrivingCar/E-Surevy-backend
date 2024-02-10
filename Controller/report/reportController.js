@@ -10,7 +10,7 @@ function checkIsIdsValid(supervisorId, surveyorId) {
 
 exports.createReport = async (req, res) => {
     try {
-        const { reports, supervisorId, surveyorId } = req.body;
+        const { reports, supervisorId, surveyor } = req.body;
         // console.log(`req.body = ${JSON.stringify(req.body, null, 2)}`);
         // Check if there are exactly 3 items
         // if (!reports || reports.length !== 3) {
@@ -18,7 +18,7 @@ exports.createReport = async (req, res) => {
         // }
 
         // Check if supervisorId and surveyorId are valid ObjectIds
-        if (checkIsIdsValid(supervisorId, surveyorId)) {
+        if (checkIsIdsValid(supervisorId, surveyor.id)) {
             return res.status(400).json({ error: 'Invalid supervisorId or surveyorId.' });
         }
 
