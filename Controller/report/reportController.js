@@ -12,37 +12,46 @@ exports.createReport = async (req, res) => {
     try {
         const { reports, supervisorId, surveyor } = req.body;
         console.log(`req.body = ${JSON.stringify(req.body, null, 2)}`);
-        const surveyorId = surveyor.id;
-        // Check if there are exactly 3 items
+
+        // Correctly extracting surveyorId from the surveyor object
+        const surveyorId = surveyor._id; // Use ._id to match your request body structure
+
+        // Optional: Uncomment and fix these sections if needed
         // if (!reports || reports.length !== 3) {
         //     return res.status(400).json({ error: 'Exactly 3 items are required.' });
         // }
 
-        // Check if supervisorId and surveyorId are valid ObjectIds
-        // if (checkIsIdsValid(supervisorId, surveyorId)) {
-        //     return res.status(400).json({ error: 'Invalid supervisorId or surveyorId. ' +  });
+        // if (!checkIsIdsValid(supervisorId, surveyorId)) {
+        //     return res.status(400).json({ error: 'Invalid supervisorId or surveyorId.' });
         // }
 
         // Check if supervisorId and surveyorId exist in their collections
         const supervisorExists = await Supervisor.findById(supervisorId);
         const surveyorExists = await Surveyor.findById(surveyorId);
 
+        if (!supervisorExists) {
+            return res.status(404).json({ error: `Supervisor not found with ID ${supervisorId}.` });
+        }
+
         if (!surveyorExists) {
-            return res.status(404).json({ error: 'Surveyor not found. ' + surveyorId });
-        } else if (!supervisorExists) {
-            return res.status(404).json({ error: 'Supervisor not found.'  + supervisorId});
+            return res.status(404).json({ error: `Surveyor not found with ID ${surveyorId}.` });
         }
 
         // Create a new report
-        const report = new ReportSchema({ reports, supervisorId, surveyorId });
+        const report = new ReportSchema({
+            reports,
+            supervisorId,
+            surveyorId: surveyorId // Use the extracted surveyorId
+        });
         await report.save();
 
         res.status(201).json({ message: 'Report created successfully', data: report });
     } catch (error) {
         console.error('Error creating report:', error);
-        res.status(500).json({ error: 'Internal Server Error: ' + error });
+        res.status(500).json({ error: `Internal Server Error: ${error}` });
     }
 };
+
 
 
 exports.updateReport = async (req, res) => {
