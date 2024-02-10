@@ -11,15 +11,21 @@ function checkIsIdsValid(supervisorId, surveyorId) {
 exports.createReport = async (req, res) => {
     try {
         const { reports, supervisorId, surveyor } = req.body;
-        // console.log(`req.body = ${JSON.stringify(req.body, null, 2)}`);
+        console.log(`req.body = ${JSON.stringify(req.body, null, 2)}`);
+        const surveyorId = surveyor.id;
         // Check if there are exactly 3 items
         // if (!reports || reports.length !== 3) {
         //     return res.status(400).json({ error: 'Exactly 3 items are required.' });
         // }
 
+        // Check if supervisorId and surveyorId are valid ObjectIds
+        if (checkIsIdsValid(supervisorId, surveyorId)) {
+            return res.status(400).json({ error: 'Invalid supervisorId or surveyorId.' });
+        }
+
         // Check if supervisorId and surveyorId exist in their collections
         const supervisorExists = await Supervisor.findById(supervisorId);
-        const surveyorExists = await Surveyor.findById(surveyor.id);
+        const surveyorExists = await Surveyor.findById(surveyorId);
 
         if (!surveyorExists) {
             return res.status(404).json({ error: 'Surveyor not found.' });
