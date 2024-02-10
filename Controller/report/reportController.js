@@ -17,14 +17,9 @@ exports.createReport = async (req, res) => {
         //     return res.status(400).json({ error: 'Exactly 3 items are required.' });
         // }
 
-        // Check if supervisorId and surveyorId are valid ObjectIds
-        if (checkIsIdsValid(supervisorId, surveyor.id)) {
-            return res.status(400).json({ error: 'Invalid supervisorId or surveyorId.' });
-        }
-
         // Check if supervisorId and surveyorId exist in their collections
         const supervisorExists = await Supervisor.findById(supervisorId);
-        const surveyorExists = await Surveyor.findById(surveyorId);
+        const surveyorExists = await Surveyor.findById(surveyor.id);
 
         if (!surveyorExists) {
             return res.status(404).json({ error: 'Surveyor not found.' });
