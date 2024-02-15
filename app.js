@@ -37,7 +37,7 @@ function handleMongooseConnect() {
   mongoose.connect("mongodb+srv://mohammedmansour4009:qEJyk5bFLnKWzyUn@cluster0.kukyo7j.mongodb.net/?retryWrites=true&w=majority", {
     useNewUrlParser: true, useUnifiedTopology: true,
   }).then(() => {
-    app.listen(3000, function () {
+    app.listen(80, function () {
       console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
     });
   })

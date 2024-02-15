@@ -32,12 +32,7 @@ exports.registerSurveyor = async (req, res) => {
         }
 
         // Create a new surveyor
-        const surveyor = new SurveyorSchema({
-            surveyorName,
-            password,
-            phone,
-            companyName
-        });
+        const surveyor = new SurveyorSchema(req.body);
 
         // Save the surveyor to the database
         await surveyor.save();
