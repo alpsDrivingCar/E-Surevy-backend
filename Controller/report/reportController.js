@@ -11,19 +11,9 @@ function checkIsIdsValid(supervisorId, surveyorId) {
 exports.createReport = async (req, res) => {
     try {
         const { reports, supervisorId, surveyor } = req.body;
-        console.log(`req.body = ${JSON.stringify(req.body, null, 2)}`);
 
         // Correctly extracting surveyorId from the surveyor object
         const surveyorId = surveyor._id; // Use ._id to match your request body structure
-
-        // Optional: Uncomment and fix these sections if needed
-        // if (!reports || reports.length !== 3) {
-        //     return res.status(400).json({ error: 'Exactly 3 items are required.' });
-        // }
-
-        // if (!checkIsIdsValid(supervisorId, surveyorId)) {
-        //     return res.status(400).json({ error: 'Invalid supervisorId or surveyorId.' });
-        // }
 
         // Check if supervisorId and surveyorId exist in their collections
         const supervisorExists = await Supervisor.findById(supervisorId);
@@ -31,10 +21,6 @@ exports.createReport = async (req, res) => {
 
         if (!supervisorExists) {
             return res.status(404).json({ error: `Supervisor not found with ID ${supervisorId}.` });
-        }
-
-        if (!surveyorExists) {
-            return res.status(404).json({ error: `Surveyor not found with ID ${surveyorId}.` });
         }
 
         // Create a new report
