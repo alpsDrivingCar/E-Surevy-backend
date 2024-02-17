@@ -10,33 +10,17 @@ function checkIsIdsValid(supervisorId, surveyorId) {
 
 exports.createReport = async (req, res) => {
     try {
-        const { reports, supervisorId, surveyor } = req.body;
-        console.log(`req.body = ${JSON.stringify(req.body, null, 2)}`);
+        const { reports, supervisorId, surveyorId } = req.body;
 
         // Correctly extracting surveyorId from the surveyor object
-        const surveyorId = surveyor._id; // Use ._id to match your request body structure
-
-        // Optional: Uncomment and fix these sections if needed
-        // if (!reports || reports.length !== 3) {
-        //     return res.status(400).json({ error: 'Exactly 3 items are required.' });
-        // }
-
-        // if (!checkIsIdsValid(supervisorId, surveyorId)) {
-        //     return res.status(400).json({ error: 'Invalid supervisorId or surveyorId.' });
-        // }
-
         // Check if supervisorId and surveyorId exist in their collections
         const supervisorExists = await Supervisor.findById(supervisorId);
-        const surveyorExists = await Surveyor.findById(surveyorId);
+        // const surveyorExists = await Surveyor.findById(surveyorId);
 
         if (!supervisorExists) {
             return res.status(404).json({ error: `Supervisor not found with ID ${supervisorId}.` });
         }
-
-        if (!surveyorExists) {
-            return res.status(404).json({ error: `Surveyor not found with ID ${surveyorId}.` });
-        }
-
+      
         // Create a new report
         const report = new ReportSchema({
             reports,
@@ -48,22 +32,45 @@ exports.createReport = async (req, res) => {
         res.status(201).json({ message: 'Report created successfully', data: report });
     } catch (error) {
         console.error('Error creating report:', error);
-        res.status(500).json({ error: `Internal Server Error: ${error}` });
+        res.status(500).json({ error: `Internal Server Error: ${error.message}` });
     }
 };
 
-
-
 exports.updateReport = async (req, res) => {
     try {
-        const reportId = req.params.id;
-        const updates = req.body;
+        const { reportId } = req.params; // Assuming the report ID is passed as a URL parameter
+        const { reports, supervisorId, surveyorId } = req.body;
 
-        const updatedReport = await ReportSchema.findByIdAndUpdate(reportId, updates, { new: true });
-        res.status(200).json({ message: 'Report updated successfully', data: updatedReport });
+        // First, validate the provided IDs
+        if (checkIsIdsValid(supervisorId, surveyorId)) {
+            return res.status(400).json({ error: 'Invalid Supervisor ID or Surveyor ID.' });
+        }
+
+        // Check if the supervisor and surveyor exist
+        const supervisorExists = await Supervisor.findById(supervisorId);
+        const surveyorExists = await Surveyor.findById(surveyorId);
+
+        if (!supervisorExists ) {
+            return res.status(404).json({ error: 'Supervisor not found.' });
+        }
+
+        // Find the report by ID and update it
+        const report = await ReportSchema.findByIdAndUpdate(reportId, {
+            $set: {
+                reports, // Assuming reports is an array or object that you want to update
+                supervisorId,
+                surveyorId
+            }
+        }, { new: true }); // {new: true} returns the updated document
+
+        if (!report) {
+            return res.status(404).json({ error: 'Report not found.' });
+        }
+
+        res.status(200).json({ message: 'Report updated successfully', data: report });
     } catch (error) {
         console.error('Error updating report:', error);
-        res.status(500).json({ error: 'Internal Server Error: ' + error });
+        res.status(500).json({ error: `Internal Server Error: ${error}` });
     }
 };
 

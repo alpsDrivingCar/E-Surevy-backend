@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 router.post('/', reportController.createReport);
-router.put('/:id', reportController.updateReport);
+router.put('/:reportId', reportController.updateReport);
 router.delete('/:id', reportController.deleteReport);
 router.get('/by-supervisor/:supervisorId/:year/:month', reportController.getReportsBySupervisorAndMonth);
 router.get('/by-surveyor/:surveyorId/:year/:month', reportController.getReportsBySurveyorAndMonth);
