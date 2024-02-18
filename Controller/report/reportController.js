@@ -20,7 +20,7 @@ exports.createReport = async (req, res) => {
         if (!supervisorExists) {
             return res.status(404).json({ error: `Supervisor not found with ID ${supervisorId}.` });
         }
-      
+
         // Create a new report
         const report = new ReportSchema({
             reports,
