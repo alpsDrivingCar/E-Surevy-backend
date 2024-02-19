@@ -4,8 +4,8 @@ const Supervisor = require('../../model/user/supervisorSchema'); // Adjust the p
 const Surveyor = require('../../model/user/surveyorSchema'); // Adjust the path to your Surveyor model
 
 
-function checkIsIdsValid(supervisorId, surveyorId) {
-    return !mongoose.Types.ObjectId.isValid(supervisorId) || !mongoose.Types.ObjectId.isValid(surveyorId);
+function checkIsIdsValid(supervisorId) {
+    return !mongoose.Types.ObjectId.isValid(supervisorId)
 }
 
 exports.createReport = async (req, res) => {
@@ -42,8 +42,8 @@ exports.updateReport = async (req, res) => {
         const { reports, supervisorId, surveyorId } = req.body;
 
         // First, validate the provided IDs
-        if (checkIsIdsValid(supervisorId, surveyorId)) {
-            return res.status(400).json({ error: 'Invalid Supervisor ID or Surveyor ID.' });
+        if (checkIsIdsValid(supervisorId)) {
+            return res.status(400).json({ error: 'Invalid Supervisor ID' });
         }
 
         // Check if the supervisor and surveyor exist
