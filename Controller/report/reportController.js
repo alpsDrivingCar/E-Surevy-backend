@@ -38,6 +38,7 @@ exports.createReport = async (req, res) => {
 
 exports.updateReport = async (req, res) => {
     try {
+        console.log("updateReport");
         const { reportId } = req.params; // Assuming the report ID is passed as a URL parameter
         const { reports, supervisorId, surveyorId } = req.body;
 
