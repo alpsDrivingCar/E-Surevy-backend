@@ -83,7 +83,7 @@ exports.getSurveyorBySupervisorId = async (req, res) => {
     try {
         const supervisorId = req.params.id;
         // Use .findOne() with a filter to find the supervisor by ID
-        const supervisor = await SurveyorSchema.findOne({ supervisorId: supervisorId })
+        const supervisor = await SurveyorSchema.find({ supervisorId: supervisorId })
 
         if (!supervisor) {
             return res.status(404).json({ error: 'Supervisor not found' });
