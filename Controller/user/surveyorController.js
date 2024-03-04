@@ -82,19 +82,21 @@ exports.allSurveyor = async (req, res) => {
 exports.getSurveyorBySupervisorId = async (req, res) => {
     try {
         const supervisorId = req.params.id;
-        const supervisor = await SupervisorSchema.findById(supervisorId).populate('surveyors');
-        // Check if the supervisor exists
+        // Use .findOne() with a filter to find the supervisor by ID
+        const supervisor = await SurveyorSchema.findOne({ supervisorId: supervisorId })
+
         if (!supervisor) {
-            return res.status(404).json({error: 'Supervisor not found'});
+            return res.status(404).json({ error: 'Supervisor not found' });
         }
 
         // Sending back the surveyors linked to the supervisor
-        res.status(200).json({data: supervisor.surveyors});
+        res.status(200).json({ data: supervisor });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({error: 'Internal Server Error: ' + error.message});
+        res.status(500).json({ error: 'Internal Server Error: ' + error.message });
     }
 };
+
 
 exports.surveyorUpdate = async (req, res) => {
     try {
