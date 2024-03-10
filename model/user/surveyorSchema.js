@@ -10,9 +10,14 @@ const surveyorSchema = new Schema({
     supervisorId: { type: ObjectId, ref: 'supervisor' },
     companyName:String,
     imageUrl: String,
-},{ timestamps: true });
+    status: {
+        type: String,
+        enum: ['active', 'inactive'],
+        default: 'active'
+    },
+}, { timestamps: true });
+
 // Create a model based on that schema
 const Surveyor = mongoose.model("surveyor", surveyorSchema);
 
-module.exports = Surveyor
-
+module.exports = Surveyor;
