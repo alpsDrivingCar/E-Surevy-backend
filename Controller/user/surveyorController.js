@@ -58,8 +58,15 @@ exports.loginSurveyor = async (req, res) => {
             return res.status(401).json({error: 'Surveyor not exists'});
         }
         if (surveyor.password !== password) {
-            return res.status(401).json({error: 'Invalid credentials  body= ' + phone + password});
+            return res.status(401).json({error: 'Invalid credentials body= ' + phone + password});
         }
+
+        // Check if surveyor is active
+        if (surveyor.status !== 'active') {
+            return res.status(403).json({error: 'Account is not active'});
+        }
+
+        // If all checks pass, return success message
         res.status(200).json({message: 'Login successful', data: surveyor});
 
     } catch (error) {
@@ -67,6 +74,7 @@ exports.loginSurveyor = async (req, res) => {
         res.status(500).json({error: 'Internal Server Error' + error});
     }
 }
+
 
 
 exports.allSurveyor = async (req, res) => {
