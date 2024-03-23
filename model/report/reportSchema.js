@@ -23,6 +23,7 @@ const mainListPdfModelSchema = new Schema({
 
 // Define the Report Schema
 const reportSchema = new Schema({
+    language :  { type: String, required: false , default:"ar" },  // en, ar
     reports: [mainListPdfModelSchema],
     supervisorId: { type: ObjectId, ref: 'supervisor' },
     surveyorId: { type: ObjectId, ref: 'surveyor' }
