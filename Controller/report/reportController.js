@@ -22,11 +22,7 @@ exports.createReport = async (req, res) => {
         }
 
         // Create a new report
-        const report = new ReportSchema({
-            reports,
-            supervisorId,
-            surveyorId: surveyorId // Use the extracted surveyorId
-        });
+        const report = new ReportSchema(req.body);
         await report.save();
 
         res.status(201).json({ message: 'Report created successfully', data: report });
@@ -57,11 +53,7 @@ exports.updateReport = async (req, res) => {
 
         // Find the report by ID and update it
         const report = await ReportSchema.findByIdAndUpdate(reportId, {
-            $set: {
-                reports, // Assuming reports is an array or object that you want to update
-                supervisorId,
-                surveyorId
-            }
+            $set: req.body
         }, { new: true }); // {new: true} returns the updated document
 
         if (!report) {
