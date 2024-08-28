@@ -1,28 +1,31 @@
-const ReportSchema = require('../../model/report/reportSchema'); // Replace with the correct path
+const Report = require('../../model/report/reportSchema'); // Replace with the correct path
 const mongoose = require('mongoose');
 const Supervisor = require('../../model/user/supervisorSchema'); // Adjust the path to your Supervisor model
 const Surveyor = require('../../model/user/surveyorSchema'); // Adjust the path to your Surveyor model
 
-
-function checkIsIdsValid(supervisorId) {
-    return !mongoose.Types.ObjectId.isValid(supervisorId)
+function checkIsIdsValid(id) {
+    return !mongoose.Types.ObjectId.isValid(id);
 }
 
 exports.createReport = async (req, res) => {
     try {
-        const { reports, supervisorId, surveyorId } = req.body;
+        const { fields, supervisorId, surveyorId } = req.body;
 
-        // Correctly extracting surveyorId from the surveyor object
         // Check if supervisorId and surveyorId exist in their collections
         const supervisorExists = await Supervisor.findById(supervisorId);
-        // const surveyorExists = await Surveyor.findById(surveyorId);
-
         if (!supervisorExists) {
             return res.status(404).json({ error: `Supervisor not found with ID ${supervisorId}.` });
         }
 
-        // Create a new report
-        const report = new ReportSchema(req.body);
+        // Validate surveyorId if it is provided
+        if (surveyorId && checkIsIdsValid(surveyorId)) {
+            return res.status(400).json({ error: 'Invalid Surveyor ID' });
+        }
+
+        const report = new Report({
+            ...req.body,
+            fields // Ensure fields are correctly passed
+        });
         await report.save();
 
         res.status(201).json({ message: 'Report created successfully', data: report });
@@ -34,26 +37,28 @@ exports.createReport = async (req, res) => {
 
 exports.updateReport = async (req, res) => {
     try {
-        console.log("updateReport");
         const { reportId } = req.params; // Assuming the report ID is passed as a URL parameter
-        const { reports, supervisorId, surveyorId } = req.body;
+        const { fields, supervisorId, surveyorId } = req.body;
 
-        // First, validate the provided IDs
-        if (checkIsIdsValid(supervisorId)) {
+        // Validate supervisorId
+        if (supervisorId && checkIsIdsValid(supervisorId)) {
             return res.status(400).json({ error: 'Invalid Supervisor ID' });
         }
 
-        // Check if the supervisor and surveyor exist
+        // Check if the supervisor exists
         const supervisorExists = await Supervisor.findById(supervisorId);
-        const surveyorExists = await Surveyor.findById(surveyorId);
-
-        if (!supervisorExists ) {
+        if (!supervisorExists) {
             return res.status(404).json({ error: 'Supervisor not found.' });
         }
 
+        // Validate surveyorId if provided
+        if (surveyorId && checkIsIdsValid(surveyorId)) {
+            return res.status(400).json({ error: 'Invalid Surveyor ID' });
+        }
+
         // Find the report by ID and update it
-        const report = await ReportSchema.findByIdAndUpdate(reportId, {
-            $set: req.body
+        const report = await Report.findByIdAndUpdate(reportId, {
+            $set: { ...req.body, fields } // Ensure fields are correctly updated
         }, { new: true }); // {new: true} returns the updated document
 
         if (!report) {
@@ -67,11 +72,10 @@ exports.updateReport = async (req, res) => {
     }
 };
 
-
 exports.deleteReport = async (req, res) => {
     try {
         const reportId = req.params.id;
-        await ReportSchema.findByIdAndDelete(reportId);
+        await Report.findByIdAndDelete(reportId);
         res.status(200).json({ message: 'Report deleted successfully' });
     } catch (error) {
         console.error('Error deleting report:', error);
@@ -102,7 +106,7 @@ exports.getReportsBySupervisorAndMonth = async (req, res) => {
             return res.status(404).json({ error: 'Supervisor not found.' });
         }
 
-        const reports = await ReportSchema.find({
+        const reports = await Report.find({
             supervisorId,
             createdAt: {
                 $gte: new Date(year, month - 1, 1),
@@ -120,10 +124,8 @@ exports.getReportsBySupervisorAndMonth = async (req, res) => {
 
 exports.getReportsAll = async (req, res) => {
     try {
-
-        const reports = await ReportSchema.find();
-        res.status(200).json({data: reports});
-
+        const reports = await Report.find();
+        res.status(200).json({ data: reports });
     } catch (error) {
         console.error('Error fetching reports:', error);
         res.status(500).json({ error: 'Internal Server Error: ' + error });
@@ -153,11 +155,11 @@ exports.getReportsBySurveyorAndMonth = async (req, res) => {
             return res.status(404).json({ error: 'Surveyor not found.' });
         }
 
-        const reports = await ReportSchema.find({
+        const reports = await Report.find({
             surveyorId,
             createdAt: {
                 $gte: new Date(year, month - 1, 1),
-                $lt: new Date(year, month, 0) // Gets the last day of the month
+                $lt: new Date(year, month, 1)
             }
         }).populate('surveyorId');
 
@@ -167,5 +169,4 @@ exports.getReportsBySurveyorAndMonth = async (req, res) => {
         console.error('Error in getReportsBySurveyorAndMonth:', error);
         res.status(500).json({ error: 'Internal Server Error: ' + error });
     }
-}
-
+};
