@@ -6,10 +6,12 @@ const Surveyor = require('../../model/user/surveyorSchema'); // Adjust the path 
 function checkIsIdsValid(id) {
     return !mongoose.Types.ObjectId.isValid(id);
 }
-
 exports.createReport = async (req, res) => {
     try {
         const { fields, supervisorId, surveyorId } = req.body;
+
+        // Log the request body for debugging purposes
+        console.log("Request Body:", JSON.stringify(req.body, null, 2));
 
         // Check if supervisorId and surveyorId exist in their collections
         const supervisorExists = await Supervisor.findById(supervisorId);
@@ -34,6 +36,7 @@ exports.createReport = async (req, res) => {
         res.status(500).json({ error: `Internal Server Error: ${error.message}` });
     }
 };
+
 
 exports.updateReport = async (req, res) => {
     try {
