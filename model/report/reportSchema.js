@@ -37,7 +37,7 @@ const buildingModelSchema = new Schema({
 const reportSchema = new Schema({
     language: { type: String, required: true, default: "ar" }, // en, ar
     fields: [fieldModelSchema], // Incorporating the FieldModel structure
-    building: buildingModelSchema, // New BuildingModel field added after fields
+    buildings: buildingModelSchema, // New BuildingModel field added after fields
     supervisorId: { type: ObjectId, ref: 'supervisor' },
     surveyorId: { type: ObjectId, ref: 'surveyor' }
 }, { timestamps: true }); // Enable timestamps here
