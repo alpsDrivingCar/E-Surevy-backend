@@ -5,13 +5,13 @@ const ObjectId = Schema.Types.ObjectId;
 // Define the GroupInfo Schema
 const groupInfoSchema = new Schema({
     type: { type: String, required: true },
-    id: { type: Number, required: true, unique: true }, // Required unique identifier
+    id: { type: Number, required: true } // Required unique identifier
 });
 
 // Define the FieldModel Schema
 const fieldModelSchema = new Schema({
     name: { type: String, required: true },
-    slug: { type: String, required: true, unique: true }, // Required unique identifier
+    slug: { type: String, required: true }, // Slug is required but not unique
     type: { type: String, required: true },
     required: { type: Boolean, default: false },
     options: { type: [String], default: null }, // For dropdown fields
@@ -26,10 +26,18 @@ const fieldModelSchema = new Schema({
     // TextEditingController is ignored in the Node.js model
 });
 
+// Define the BuildingModel Schema
+const buildingModelSchema = new Schema({
+    buildingFields: { type: [fieldModelSchema], required: true }, // List of FieldModel objects
+    buildingNo: { type: Number, required: true }, // Building number
+    isExpanded: { type: Boolean, required: true }, // Boolean to indicate if expanded
+});
+
 // Define the Report Schema
 const reportSchema = new Schema({
     language: { type: String, required: true, default: "ar" }, // en, ar
     fields: [fieldModelSchema], // Incorporating the FieldModel structure
+    building: buildingModelSchema, // New BuildingModel field added after fields
     supervisorId: { type: ObjectId, ref: 'supervisor' },
     surveyorId: { type: ObjectId, ref: 'surveyor' }
 }, { timestamps: true }); // Enable timestamps here

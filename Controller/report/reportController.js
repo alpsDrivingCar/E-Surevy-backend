@@ -24,6 +24,8 @@ exports.createReport = async (req, res) => {
             return res.status(400).json({ error: 'Invalid Surveyor ID' });
         }
 
+    
+
         const report = new Report({
             ...req.body,
             fields // Ensure fields are correctly passed
@@ -36,6 +38,7 @@ exports.createReport = async (req, res) => {
         res.status(500).json({ error: `Internal Server Error: ${error.message}` });
     }
 };
+
 
 
 exports.updateReport = async (req, res) => {
