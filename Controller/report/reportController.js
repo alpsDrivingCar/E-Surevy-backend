@@ -9,7 +9,6 @@ function checkIsIdsValid(id) {
 exports.createReport = async (req, res) => {
     try {
         const { fields, supervisorId, surveyorId } = req.body;
-
         // Log the request body for debugging purposes
         console.log("Request Body:", JSON.stringify(req.body, null, 2));
 
