@@ -12,6 +12,7 @@ exports.createReport = async (req, res) => {
         // Log the request body for debugging purposes
         console.log("Request Body:", JSON.stringify(req.body, null, 2));
 
+
         // Check if supervisorId and surveyorId exist in their collections
         const supervisorExists = await Supervisor.findById(supervisorId);
         if (!supervisorExists) {
